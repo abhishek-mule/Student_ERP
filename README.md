@@ -42,7 +42,7 @@ Sign in and access your personalized educational management dashboard:
 
 ## 🌍 Live Demo
 
-🌐 **Visit:** [https://student.com](https://student.com)
+🌐 **Visit:** [ https://student-erp-five.vercel.app/]
 
 > Accessible on all devices – anytime, anywhere!
 
