@@ -4,16 +4,15 @@ import { motion } from 'framer-motion';
 import { 
   School, 
   LayoutDashboard, 
-  Users, 
-  FileText, 
   Calendar, 
-  DollarSign, 
-  MessageSquare, 
-  BarChart, 
-  Settings, 
-  LogOut, 
+  GraduationCap,
+  Receipt,
+  BookOpen,
+  Ticket,
+  Bell,
+  Settings,
+  LogOut,
   ChevronRight,
-  Menu,
   X
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
@@ -31,10 +30,6 @@ interface SidebarItem {
   icon: React.ReactNode;
   path: string;
   roles: UserRole[];
-  submenu?: {
-    title: string;
-    path: string;
-  }[];
 }
 
 const sidebarItems: SidebarItem[] = [
@@ -45,54 +40,46 @@ const sidebarItems: SidebarItem[] = [
     roles: ['admin', 'teacher', 'student'],
   },
   {
-    title: 'Students',
-    icon: <Users size={20} />,
-    path: '/students',
-    roles: ['admin', 'teacher'],
-    submenu: [
-      { title: 'All Students', path: '/students' },
-      { title: 'Add Student', path: '/students/add' },
-    ],
-  },
-  {
-    title: 'Teachers',
-    icon: <Users size={20} />,
-    path: '/teachers',
-    roles: ['admin'],
-    submenu: [
-      { title: 'All Teachers', path: '/teachers' },
-      { title: 'Add Teacher', path: '/teachers/add' },
-    ],
-  },
-  {
     title: 'Attendance',
     icon: <Calendar size={20} />,
     path: '/attendance',
     roles: ['admin', 'teacher', 'student'],
   },
   {
-    title: 'Assignments',
-    icon: <FileText size={20} />,
-    path: '/assignments',
+    title: 'Schedule',
+    icon: <Calendar size={20} />,
+    path: '/schedule',
+    roles: ['admin', 'teacher', 'student'],
+  },
+  {
+    title: 'Results',
+    icon: <GraduationCap size={20} />,
+    path: '/result',
     roles: ['admin', 'teacher', 'student'],
   },
   {
     title: 'Fees',
-    icon: <DollarSign size={20} />,
+    icon: <Receipt size={20} />,
     path: '/fees',
     roles: ['admin', 'student'],
   },
   {
-    title: 'Messages',
-    icon: <MessageSquare size={20} />,
-    path: '/messages',
+    title: 'Courses',
+    icon: <BookOpen size={20} />,
+    path: '/course',
     roles: ['admin', 'teacher', 'student'],
   },
   {
-    title: 'Analytics',
-    icon: <BarChart size={20} />,
-    path: '/analytics',
-    roles: ['admin', 'teacher'],
+    title: 'Hall Ticket',
+    icon: <Ticket size={20} />,
+    path: '/hallticket',
+    roles: ['student'],
+  },
+  {
+    title: 'Notices',
+    icon: <Bell size={20} />,
+    path: '/notices',
+    roles: ['admin', 'teacher', 'student'],
   },
   {
     title: 'Settings',
@@ -105,14 +92,9 @@ const sidebarItems: SidebarItem[] = [
 const Sidebar: React.FC<SidebarProps> = ({ isMobile, isOpen, onClose }) => {
   const location = useLocation();
   const { user, logout } = useAuth();
-  const [expandedItem, setExpandedItem] = useState<string | null>(null);
   
   const userRole = user?.role || 'student';
   const filteredItems = sidebarItems.filter(item => item.roles.includes(userRole as UserRole));
-  
-  const toggleExpanded = (title: string) => {
-    setExpandedItem(expandedItem === title ? null : title);
-  };
   
   const variants = {
     open: { opacity: 1, x: 0 },
@@ -135,65 +117,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isMobile, isOpen, onClose }) => {
       
       <nav className="mt-5 flex-1 space-y-1 px-2">
         {filteredItems.map((item) => (
-          <div key={item.title}>
-            {item.submenu ? (
-              <div>
-                <button
-                  onClick={() => toggleExpanded(item.title)}
-                  className={cn(
-                    'group flex w-full items-center rounded-md py-2 px-3 text-sm font-medium',
-                    location.pathname.startsWith(`/${userRole}${item.path}`)
-                      ? 'bg-primary-100 text-primary-700'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  )}
-                >
-                  <div className="flex flex-1 items-center">
-                    <span className="mr-3">{item.icon}</span>
-                    {item.title}
-                  </div>
-                  <ChevronRight
-                    size={16}
-                    className={cn(
-                      'transition-transform duration-200',
-                      expandedItem === item.title ? 'rotate-90' : ''
-                    )}
-                  />
-                </button>
-                
-                {expandedItem === item.title && (
-                  <div className="mt-1 space-y-1 pl-10">
-                    {item.submenu.map((subItem) => (
-                      <Link
-                        key={subItem.title}
-                        to={`/${userRole}${subItem.path}`}
-                        className={cn(
-                          'block rounded-md py-2 px-3 text-sm font-medium',
-                          location.pathname === `/${userRole}${subItem.path}`
-                            ? 'bg-primary-50 text-primary-700'
-                            : 'text-gray-700 hover:bg-gray-50'
-                        )}
-                      >
-                        {subItem.title}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Link
-                to={`/${userRole}${item.path}`}
-                className={cn(
-                  'group flex items-center rounded-md py-2 px-3 text-sm font-medium',
-                  location.pathname === `/${userRole}${item.path}`
-                    ? 'bg-primary-100 text-primary-700'
-                    : 'text-gray-700 hover:bg-gray-100'
-                )}
-              >
-                <span className="mr-3">{item.icon}</span>
-                {item.title}
-              </Link>
+          <Link
+            key={item.title}
+            to={`/${userRole}${item.path}`}
+            className={cn(
+              'group flex items-center rounded-md py-2 px-3 text-sm font-medium',
+              location.pathname === `/${userRole}${item.path}`
+                ? 'bg-primary-100 text-primary-700'
+                : 'text-gray-700 hover:bg-gray-100'
             )}
-          </div>
+          >
+            <span className="mr-3">{item.icon}</span>
+            {item.title}
+          </Link>
         ))}
       </nav>
       

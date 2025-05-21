@@ -7,6 +7,13 @@ import Layout from './components/layout/Layout';
 import StudentDashboard from './pages/student/StudentDashboard';
 import TeacherDashboard from './pages/teacher/TeacherDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AttendancePage from './pages/modules/AttendancePage';
+import SchedulePage from './pages/modules/SchedulePage';
+import ResultsPage from './pages/modules/ResultsPage';
+import FeesPage from './pages/modules/FeesPage';
+import CoursesPage from './pages/modules/CoursesPage';
+import NoticesPage from './pages/modules/NoticesPage';
+import SettingsPage from './pages/modules/SettingsPage';
 import { useAuth } from './contexts/AuthContext';
 
 // Protected Route Component
@@ -36,33 +43,24 @@ const ProtectedRoute = ({
 
 // Role-based Routes
 const RoleRoutes = () => {
+  const { user } = useAuth();
+  const role = user?.role || '';
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/teacher/dashboard"
-          element={
-            <ProtectedRoute requiredRole="teacher">
-              <TeacherDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/student/dashboard"
-          element={
-            <ProtectedRoute requiredRole="student">
-              <StudentDashboard />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/dashboard" element={
+          role === 'admin' ? <AdminDashboard /> :
+          role === 'teacher' ? <TeacherDashboard /> :
+          <StudentDashboard />
+        } />
+        <Route path="/attendance" element={<AttendancePage />} />
+        <Route path="/schedule" element={<SchedulePage />} />
+        <Route path="/result" element={<ResultsPage />} />
+        <Route path="/fees" element={<FeesPage />} />
+        <Route path="/course" element={<CoursesPage />} />
+        <Route path="/notices" element={<NoticesPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Route>
     </Routes>
   );
@@ -75,7 +73,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login/:role" element={<LoginPage />} />
-          <Route path="/*" element={<RoleRoutes />} />
+          <Route path="/:role/*" element={<RoleRoutes />} />
         </Routes>
       </Router>
     </AuthProvider>
