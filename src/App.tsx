@@ -8,6 +8,12 @@ import StudentDashboard from './pages/student/StudentDashboard';
 import TeacherDashboard from './pages/teacher/TeacherDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AttendancePage from './pages/modules/AttendancePage';
+import SchedulePage from './pages/modules/SchedulePage';
+import ResultsPage from './pages/modules/ResultsPage';
+import FeesPage from './pages/modules/FeesPage';
+import CoursesPage from './pages/modules/CoursesPage';
+import NoticesPage from './pages/modules/NoticesPage';
+import SettingsPage from './pages/modules/SettingsPage';
 import { useAuth } from './contexts/AuthContext';
 
 // Protected Route Component
@@ -49,13 +55,12 @@ const RoleRoutes = () => {
           <StudentDashboard />
         } />
         <Route path="/attendance" element={<AttendancePage />} />
-        <Route path="/schedule" element={<div>Schedule Module</div>} />
-        <Route path="/result" element={<div>Results Module</div>} />
-        <Route path="/fees" element={<div>Fees Module</div>} />
-        <Route path="/course" element={<div>Course Module</div>} />
-        <Route path="/hallticket" element={<div>Hall Ticket Module</div>} />
-        <Route path="/notices" element={<div>Notices Module</div>} />
-        <Route path="/settings" element={<div>Settings Module</div>} />
+        <Route path="/schedule" element={<SchedulePage />} />
+        <Route path="/result" element={<ResultsPage />} />
+        <Route path="/fees" element={<FeesPage />} />
+        <Route path="/course" element={<CoursesPage />} />
+        <Route path="/notices" element={<NoticesPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Route>
     </Routes>
   );
